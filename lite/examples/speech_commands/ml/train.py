@@ -60,7 +60,13 @@ parser.add_argument(
     nargs='+',
     required=True,
     help='<Required> The list of data directories. e.g., data/train')
-
+parser.add_argument(
+    '-epoch',
+    action='store',
+    dest='epoch',
+    type=int,
+    default=100,
+    help='num of epoch')
 args = parser.parse_args()
 parser.print_help()
 print('input args: ', args)
@@ -73,6 +79,7 @@ if __name__ == '__main__':
   output_representation = args.output_representation
   sample_rate = args.sample_rate
   batch_size = args.batch_size
+  epoch = args.epoch
   classes = get_classes(wanted_only=True)
   model_settings = prepare_model_settings(
       label_count=len(prepare_words_list(classes)),
@@ -136,7 +143,7 @@ if __name__ == '__main__':
   model.fit_generator(
       train_gen,
       steps_per_epoch=ap.set_size('training') // batch_size,
-      epochs=100,
+      epochs=epoch,
       verbose=1,
       callbacks=callbacks)
 
